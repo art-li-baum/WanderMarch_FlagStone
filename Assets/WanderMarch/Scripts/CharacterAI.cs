@@ -16,9 +16,10 @@ namespace WanderMarch.Scripts
         private enum State
         {
             Laps,
+            SideToSide,
         }
 
-       [SerializeField,ShowOnly] private State _currentState = State.Laps;
+       [SerializeField] private State _currentState = State.Laps;
         
         // Start is called before the first frame update
         void Start()
@@ -61,6 +62,23 @@ namespace WanderMarch.Scripts
 
                     break;
                 }
+                case State.SideToSide:
+                {
+                    _l += Time.deltaTime;
+                    if (_l < lapTimer) break;
+                    _l = 0;
+                    if (_lap == 0)
+                    {
+                        _lap = 1;
+                        _motor.SetInput(Vector2.right);
+                    }
+                    else
+                    {
+                        _lap = 0;
+                        _motor.SetInput(Vector2.left);
+                    }
+                }
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
